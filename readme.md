@@ -43,4 +43,4 @@
 | closedItemCallBack  |  关闭tan某一项的回调          | Object {$this, title, index, len}| 
 
 ### 页面查看效果 预览如下地址
-<p><a href="https://tugenhua0707.github.io/easyuiTab2/index.html" target="_blank">https://tugenhua0707.github.io/easyuiTab/index.html</a></p>
+<p><a href="https://tugenhua0707.github.io/easyuiTab2/index.html" target="_blank">https://tugenhua0707.github.io/easyuiTab2/index.html</a></p>
