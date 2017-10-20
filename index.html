@@ -31,11 +31,17 @@
     <script type="text/javascript" src="./js/tabs.js"></script>
   </head>
   <body>
+    <h2>请在输入框输入数字</h2>
+    <div id="tabContent" style="display: none;"><div>我是相同的内容我是相同的内容我是相同的内容</div></div>
     <div id="tabContent1" style="display: none;"><div>adsasddasdasadsadsads</div></div>
     <div id="tabContent2" style="display: none;"><div>啊啊啊啊所大多所多撒奥多所无</div></div>
     <div id="tabContent3" style="display: none;"><div>adsasdqweqweqwwrrdfggffggf</div></div>
-    <input text="number" id="inputId" style="width: 200px; height: 26px; border: 1px solid red;" />
+    <input text="number" id="inputId" style="width: 200px; height: 26px; border: 1px solid red;" placeholder="请在输入框输入数字" />
+
+    <input text="number" id="inputId2" style="width: 200px; height: 26px; border: 1px solid red;" placeholder="请在输入框输入数字" />
+
     <div id="containerId"></div>
+    <div id="containerId2"></div>
     <script>  
       $("#inputId").keyup(function(e){
         var value = e.target.value - 0;
@@ -51,6 +57,26 @@
                 $("#inputId").val('');
               } else {
                 $("#inputId").val(len);
+              }
+              $this.setValue(len);
+            }
+          });
+        }
+      });
+      $("#inputId2").keyup(function(e){
+        var value = e.target.value - 0;
+        if (value > 0) {
+         var $panel = new AddTabs({
+            value: value,
+            sameTabContent: 'tabContent',
+            container: '#containerId2',
+            closedItemCallBack: function(obj){
+              var len = obj.len;
+              var $this = obj.$this;
+              if (len === 0) {
+                $("#inputId2").val('');
+              } else {
+                $("#inputId2").val(len);
               }
               $this.setValue(len);
             }

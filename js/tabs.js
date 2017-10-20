@@ -26,6 +26,9 @@ function AddTabs(cfg) {
   // 内容容器的前缀
   this.prefixContent = cfg.prefixContent;
 
+  // 内容取相同的
+  this.sameTabContent = cfg.sameTabContent || null;
+
   this.addTabs();
   return this;
 }
@@ -41,6 +44,9 @@ AddTabs.prototype.addTabs = function() {
     for (var i = 0; i < values; i++) {
       var title = (i+1);
       var content = $('#' + this.prefixContent + title).html();
+      if (self.sameTabContent) {
+        content = $('#' + self.sameTabContent).html();
+      }
       $($tabs).tabs({
         onAdd: function() {
           var $this = $(this);

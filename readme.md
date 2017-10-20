@@ -27,15 +27,36 @@
         });
       }
     });
+    $("#inputId2").keyup(function(e){
+        var value = e.target.value - 0;
+        if (value > 0) {
+         var $panel = new AddTabs({
+            value: value,
+            sameTabContent: 'tabContent',
+            container: '#containerId2',
+            closedItemCallBack: function(obj){
+              var len = obj.len;
+              var $this = obj.$this;
+              if (len === 0) {
+                $("#inputId2").val('');
+              } else {
+                $("#inputId2").val(len);
+              }
+              $this.setValue(len);
+            }
+         });
+        }
+      });
 <p>如上调用即可初始化。</p>
 <h3>Javascript 相对应的API如下：</h3>
 
 ####  组件API
 |      属性      |             说明                               |     类型        |     默认值     |
 | --------------|:--------------------------------------------:  |   :-----------:| :-------------:|
-|   container   |  tab项的容器[必须的参数]                          | [String]      |  ''             |
+|   container   |  tab项的容器[必须的参数]                          | [DOM元素]      |  ''             |
 |   value       |  输入框的值[必须的参数]                            | [String]       |  ''            |
 |   prefixContent| 内容的前缀类名                                | [String]       |  ''            |
+|  sameTabContent | 每个tab项取相同的内容                         | DOM元素        |   null          |
 
 ####  回调方法
 |     方法名           |         说明         |     返回参数                                           | 
