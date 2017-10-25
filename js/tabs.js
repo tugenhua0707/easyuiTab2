@@ -10,6 +10,9 @@ function AddTabs(cfg) {
   // 关闭一项的回调
   this.closedItemCallBack = cfg.closedItemCallBack || null;
 
+  // 页面渲染完成后的回调
+  this.initTabCallBack = cfg.initTabCallBack || null;
+
   if (!cfg.container) {
     throw new Error('tab项的容器不能为空');
     return;
@@ -38,7 +41,7 @@ AddTabs.prototype.addTabs = function() {
   var values = this.value;
   var container = this.container;
   $(container).html('');
-  var $tabs = $('<div class="easyui-tabs" style="width:400px;height:250px;"></div>');
+  var $tabs = $('<div class="easyui-tabs" style="min-width:400px; min-height:250px;"></div>');
   $(container).append($tabs);
   if (values >= 0) {
     for (var i = 0; i < values; i++) {
@@ -48,11 +51,14 @@ AddTabs.prototype.addTabs = function() {
         content = $('#' + self.sameTabContent).html();
       }
       $($tabs).tabs({
-        onAdd: function() {
+        onAdd: function(title, index) {
           var $this = $(this);
           if($this.find('.tabs-wrap .arrow_icon').length < 1) {
             $this.find('.tabs-wrap').append('<i class="arrow_icon"></i>');
           }
+          setTimeout(function(){
+            self.initTabCallBack && $.isFunction(self.initTabCallBack) && self.initTabCallBack($this, title, index);
+          }, 40);
           // 面板的展开与收缩
           self.panelUpAndDown($this);
         },

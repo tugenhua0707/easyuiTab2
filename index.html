@@ -2,10 +2,15 @@
 <html>
   <head>
     <title>tab演示</title>
-    <script src="./libs/jquery-1.11.0.min.js"></script>
-    <script src='./libs/easyui/jquery.easyui.min.js'></script>
     <link href="./libs/easyui/themes/default/easyui.css" rel="stylesheet" />
     <link href="./libs/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="./libs/kindeditor/themes/default/default.css" rel="stylesheet" />
+
+    <script src="./libs/jquery-1.11.0.min.js"></script>
+    <script src='./libs/easyui/jquery.easyui.min.js'></script>
+    <script type="text/javascript" src="./libs/kindeditor/kindeditor-all.js"></script>
+    <script type="text/javascript" src="./libs/kindeditor/lang/zh_CN.js"></script>
+
     <style>
       .hidden {
         display: none;
@@ -27,20 +32,47 @@
         background-position: -14px 3px;
         top: 2px;
       }
+      .tabs li a.tabs-inner {
+        padding: 0 14px;
+      }
     </style>
     <script type="text/javascript" src="./js/tabs.js"></script>
   </head>
   <body>
     <h2>请在输入框输入数字</h2>
-    <div id="tabContent" style="display: none;"><div>我是相同的内容我是相同的内容我是相同的内容</div></div>
+    <div id="tabContent" style="display: none;">
+      <form>
+        <div class="content">
+          <p>
+            <label>姓名：</label>
+            <input name="username" type="text"/>
+          </p>
+          <p>
+            <label>年龄：</label>
+            <input name="age" type="text" />
+          </p>
+          <p>
+            <label>爱好：</label>
+            <select name="love" style="width:100px;height:24px;">
+              <option value="1">女人</option>
+              <option value="2">金钱</option>
+              <option value="3">地位</option>
+              <option value="4">权利</option>
+            </select>
+          </p>
+        </div>
+        <textarea name="editorName" style="width:700px;height:300px;">
+          html内容
+        </textarea>
+      </form>
+    </div>
     <div id="tabContent1" style="display: none;"><div>adsasddasdasadsadsads</div></div>
     <div id="tabContent2" style="display: none;"><div>啊啊啊啊所大多所多撒奥多所无</div></div>
     <div id="tabContent3" style="display: none;"><div>adsasdqweqweqwwrrdfggffggf</div></div>
+    <div></div>
     <input text="number" id="inputId" style="width: 200px; height: 26px; border: 1px solid red;" placeholder="请在输入框输入数字" />
 
-    <input text="number" id="inputId2" style="width: 200px; height: 26px; border: 1px solid red;" placeholder="请在输入框输入数字" />
-
-    <div id="containerId"></div>
+    <div id="containerId" style="width: 800px;"></div>
     <div id="containerId2"></div>
     <script>  
       $("#inputId").keyup(function(e){
@@ -48,8 +80,22 @@
         if (value > 0) {
          var $panel = new AddTabs({
             value: value,
-            prefixContent: 'tabContent',
+            sameTabContent: 'tabContent',
             container: '#containerId',
+            initTabCallBack: function($this, title, index) {
+              var panels = $this.find('.tabs-panels .panel').eq(index);
+              var $formElems = $(panels).find('form').serializeArray();
+
+              // 设置form元素的属性
+              setFormElems(panels, $formElems, title);
+              // 渲染富文本编辑器
+              KindEditor.ready(function(K) {
+                K.init({
+                  id: '#editorName' + title
+                });
+              });
+              renderKindeditor(panels, title);
+            },
             closedItemCallBack: function(obj){
               var len = obj.len;
               var $this = obj.$this;
@@ -63,26 +109,37 @@
           });
         }
       });
-      $("#inputId2").keyup(function(e){
-        var value = e.target.value - 0;
-        if (value > 0) {
-         var $panel = new AddTabs({
-            value: value,
-            sameTabContent: 'tabContent',
-            container: '#containerId2',
-            closedItemCallBack: function(obj){
-              var len = obj.len;
-              var $this = obj.$this;
-              if (len === 0) {
-                $("#inputId2").val('');
-              } else {
-                $("#inputId2").val(len);
-              }
-              $this.setValue(len);
+      // 设置form元素的name属性 
+      function setFormElems($panel, $formElems, title) {
+        if ($formElems && $formElems.length) {
+          for (var i = 0, ilen = $formElems.length; i < ilen; i++) {
+            var name = $formElems[i].name;
+            var newAttrName = name + title;
+            if ($($panel).find('input[name="'+name+'"]')) {
+              $($panel).find('input[name="'+name+'"]').attr("name", newAttrName)
             }
-          });
+            if ($($panel).find('select[name="'+name+'"]')) {
+              $($panel).find('select[name="'+name+'"]').attr('name', newAttrName);
+            }
+            if ($($panel).find('textarea[name="'+name+'"]')) {
+              $($panel).find('textarea[name="'+name+'"]').attr('name', newAttrName);
+            }
+          }
         }
-      });
+      }
+      function renderKindeditor($panel, title) {
+        var editorElem = $('textarea[name="editorName'+title+'"]').eq(0);
+        console.log(editorElem);
+        KindEditor.create(editorElem, {
+          items: [
+            'source', 'fontname', 'forecolor', 'fontsize', 'hilitecolor', 'bold', 'italic', 'underline' ,'hr',
+            '|', 'emoticons', 'justifyleft', 'justifycenter', 'justifyright','insertorderedlist','insertunorderedlist','justifyfull', 'multiimage2','link', 'fullscreen', 'iphone'
+          ],
+          // uploadJson: '',  // 该配置是上传图片的地址
+          pasteType: 1,      // 0 禁止黏贴 1 是纯文本黏贴 2 是html黏贴
+          minHeight: 375
+        });
+      }
     </script>
   </body>
 </html>

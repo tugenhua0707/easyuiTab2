@@ -1,0 +1,32 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+body {
+  word-wrap: break-word;
+  color: #434343;
+  font-family: '微软雅黑';
+  font-size: 17px;
+  line-height: 27px;
+  padding: 0 5%;
+}
+p {
+  padding: 6px;
+}
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+@media(min-width: 320px) { 
+  
+}
+@media(min-width: 360px) { 
+  
+}
+@media(min-width: 400px) { 
+  
+}
+@media(min-width: 640px) { 
+  
+}
+
