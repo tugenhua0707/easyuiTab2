@@ -44,16 +44,12 @@
       <form>
         <div class="content">
           <p>
-            <label>姓名：</label>
-            <input name="username" type="text"/>
+            <label>标题：</label>
+            <input name="title" type="text"/>
           </p>
           <p>
-            <label>年龄：</label>
-            <input name="age" type="text" />
-          </p>
-          <p>
-            <label>爱好：</label>
-            <select name="love" style="width:100px;height:24px;">
+            <label>类型：</label>
+            <select name="type" style="width:100px;height:24px;">
               <option value="1">女人</option>
               <option value="2">金钱</option>
               <option value="3">地位</option>
@@ -61,19 +57,12 @@
             </select>
           </p>
         </div>
-        <textarea name="editorName" style="width:700px;height:300px;">
-          html内容
-        </textarea>
+        <textarea name="editorName" style="width:700px;height:300px;"></textarea>
       </form>
     </div>
-    <div id="tabContent1" style="display: none;"><div>adsasddasdasadsadsads</div></div>
-    <div id="tabContent2" style="display: none;"><div>啊啊啊啊所大多所多撒奥多所无</div></div>
-    <div id="tabContent3" style="display: none;"><div>adsasdqweqweqwwrrdfggffggf</div></div>
-    <div></div>
-    <input text="number" id="inputId" style="width: 200px; height: 26px; border: 1px solid red;" placeholder="请在输入框输入数字" />
-
+    <div>
+    <input text="number" id="inputId" style="width: 200px; height: 26px; border: 1px solid red;" placeholder="请在输入框输入数字" /><span id="j-submit">提交</span></div>
     <div id="containerId" style="width: 800px;"></div>
-    <div id="containerId2"></div>
     <script>  
       $("#inputId").keyup(function(e){
         var value = e.target.value - 0;
@@ -85,7 +74,6 @@
             initTabCallBack: function($this, title, index) {
               var panels = $this.find('.tabs-panels .panel').eq(index);
               var $formElems = $(panels).find('form').serializeArray();
-
               // 设置form元素的属性
               setFormElems(panels, $formElems, title);
               
@@ -125,7 +113,6 @@
       }
       function renderKindeditor($panel, title) {
         var editorElem = $('textarea[name="editorName'+title+'"]').eq(0);
-        console.log(editorElem);
         KindEditor.create(editorElem, {
           items: [
             'source', 'fontname', 'forecolor', 'fontsize', 'hilitecolor', 'bold', 'italic', 'underline' ,'hr',
@@ -136,6 +123,26 @@
           minHeight: 375
         });
       }
+      $('#j-submit').click(function(){
+        var newArrs = [];
+        var tabs = $("#containerId .easyui-tabs .panel");
+        $(tabs).each(function(index, item){
+          var curIndex = index + 1;
+          var title = $(item).find('input[name="title'+curIndex+'"]').val();
+          var type = $(item).find('select[name="type'+curIndex+'"]').val();
+          var editorDOM = $('textarea[name="editorName'+curIndex+'"]').eq(0);
+          KindEditor.sync(editorDOM);
+          var editorName = editorDOM.val();
+          newArrs.push({
+            "title": title,
+            "type": type,
+            "editorName": editorName,
+            "index": curIndex,
+            "operateType": 1
+          });
+        });
+        console.log(newArrs);
+      });
     </script>
   </body>
 </html>
