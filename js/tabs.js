@@ -48,7 +48,7 @@ AddTabs.prototype.addTabs = function() {
       var title = (i+1);
       var content = $('#' + this.prefixContent + title).html();
       if (self.sameTabContent) {
-        content = $('#' + self.sameTabContent).html();
+        content = $(self.sameTabContent).html();
       }
       $($tabs).tabs({
         onAdd: function(title, index) {
